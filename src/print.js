@@ -3,135 +3,184 @@ const
     colored = true;
 
 /**
- * // TODO modulize
  * @param {object|function|Error|string} scope 
  * @param {string|Iterable|Error|string} method 
  * @param {Iterable|Error|string} args 
  */
 const print = module.exports = function (scope, method, args) {
     if (_.constants.PROD) return;
-    let output = '';
+    let output = styleLogStart();
 
     if (_.is.string(scope)) {
-        output += yellow(scope);
+        output += styleMessage(scope);
     } else if (scope instanceof Error) {
-        output += red(scope.message) + '\n' + grey(scope.stack);
+        output += styleError(scope);
     } else if (scope instanceof Object) {
-        if (_.is.object(scope)) {
-            const
-                scopeName = scope.__proto__.constructor.name,
-                scopeData = scope.uid ?? scope['@id'] ?? '';
-
-            output += cyan(scopeName) + grey('<') + green(scopeData) + grey('>');
-        } else {
-            output += cyan(scope.name);
-        }
-
+        output += styleInstance(scope);
         if (_.is.string(method)) {
-            if (!Reflect.has(scope, method)) {
-                output += ' ' + yellow(method);
+            if (Reflect.has(scope, method)) {
+                output += style.grey('.') + style.magenta(method);
+                if (_.is.string(args))
+                    output += ' ' + styleMessage(args);
+                else if (args instanceof Error)
+                    output += ' ' + styleError(args);
+                else if (_.is.object.iterable(args) && _.is.number(args.length))
+                    output += styleArguments(args);
             } else {
-                output += grey('.') + magenta(method);
-
-                if (_.is.string(args)) {
-                    output += ' ' + yellow(args);
-                } else if (args instanceof Error) {
-                    output += ' ' + red(args.message) + '\n' + grey(args.stack);
-                } else if (_.is.iterable(args) && _.is.number(args.length)) {
-                    const
-                        argPairs = Array.from(args).map(arg => [
-                            arg?.__proto__.constructor.name ?? '' + arg,
-                            arg?.uid ?? arg?.['@id'] ?? ''
-                        ]);
-
-                    output += grey('(')
-                        + argPairs.map(([argName, argData]) =>
-                            blue(argName) + (argData ? grey('<') + green(argData) + grey('>') : '')
-                        ).join(grey(', '))
-                        + grey(')');
-                }
+                output += ' ' + styleMessage(method);
             }
         } else if (method instanceof Error) {
-            output += ' ' + red(method.message) + '\n' + grey(method.stack);
-        } else if (_.is.iterable(method) && _.is.number(method.length)) {
-            const
-                argPairs = Array.from(method).map(arg => [
-                    arg?.__proto__.constructor.name ?? '' + arg,
-                    arg?.uid ?? arg?.['@id'] ?? ''
-                ]);
-
-            output += grey('(')
-                + argPairs.map(([argName, argData]) =>
-                    blue(argName) + (argData ? grey('<') + green(argData) + grey('>') : '')
-                ).join(grey(', '))
-                + grey(')');
+            output += ' ' + styleError(method);
+        } else if (_.is.object.iterable(method) && _.is.number(method.length)) {
+            output += styleArguments(method);
         }
     }
 
-    console.log(output);
+    // console.log(output);
+    process.stdout.write(output + '\n');
 };
 
-function bold(value) {
-    if (!colored) return value;
-    return '\u001b[1m' + value + '\u001b[22m';
+/**
+ * @returns {string}
+ */
+function styleLogStart() {
+    const now = new Date();
+    return style.grey('[' + now.toLocaleTimeString() + '.' + now.getMilliseconds() + ']:') + ' ';
 }
 
-function italic(value) {
-    if (!colored) return value;
-    return '\u001b[3m' + value + '\u001b[23m';
+/**
+ * @param {string} msg 
+ * @returns {string}
+ */
+function styleMessage(msg) {
+    return style.yellow(msg);
 }
 
-function underline(value) {
-    if (!colored) return value;
-    return '\u001b[4m' + value + '\u001b[24m';
+/**
+ * @param {Error} err 
+ * @returns {string}
+ */
+function styleError(err) {
+    return style.red(err.message) + '\n' + style.grey(err.stack);
 }
 
-function strikethrough(value) {
-    if (!colored) return value;
-    return '\u001b[9m' + value + '\u001b[29m';
+/**
+ * @param {boolean|number|string} value 
+ * @returns {string}
+ */
+function stylePrimitive(value) {
+    if (_.is.null(value)) return style.green('' + value);
+    if (_.is.boolean(value)) return style.green('' + value);
+    if (_.is.number(value)) return style.green('' + value);
+    if (_.is.string(value)) return style.green('"' + value + '"');
+    return style.green(JSON.stringify(value));
 }
 
-function black(value) {
-    if (!colored) return value;
-    return '\u001b[30m' + value + '\u001b[39m';
+/**
+ * @param {any} obj 
+ * @returns {string}
+ */
+function styleObject(obj) {
+    const label = obj?.__proto__.constructor.name ?? '' + obj;
+    const info = obj?.uid ?? obj?.['@id'];
+    let output = '';
+    output += style.blue(label);
+    if (info) output += style.grey('<') + style.green(info) + style.grey('>');
+    return output;
 }
 
-function red(value) {
-    if (!colored) return value;
-    return '\u001b[31m' + value + '\u001b[39m';
+/**
+ * 
+ * @param {object|function} obj 
+ * @returns {string}
+ */
+function styleInstance(obj) {
+    let output = style.cyan(obj.__proto__.constructor.name);
+    if (_.is.object(obj)) output += style.grey('<')
+        + style.green(obj?.uid ?? obj?.['@id'] ?? '')
+        + style.grey('>');
+    return output;
 }
 
-function green(value) {
-    if (!colored) return value;
-    return '\u001b[32m' + value + '\u001b[39m';
+/**
+ * @param {{length: number, [index: number]: any}} args 
+ * @returns {string}
+ */
+function styleArguments(args) {
+    let output = style.grey('(');
+    for (let i = 0, max = args.length; i < max; i++) {
+        if (i > 0) output += style.grey(', ');
+        output += styleObject(args[i]);
+    }
+    output += style.grey(')');
+    return output;
 }
 
-function yellow(value) {
-    if (!colored) return value;
-    return '\u001b[33m' + value + '\u001b[39m';
+function style(code) {
+    return '\u001b[' + code + 'm';
 }
 
-function blue(value) {
-    if (!colored) return value;
-    return '\u001b[34m' + value + '\u001b[39m';
-}
+style.bold = function (str) {
+    if (!colored) return str;
+    return style(1) + str + style(22);
+};
 
-function magenta(value) {
-    if (!colored) return value;
-    return '\u001b[35m' + value + '\u001b[39m';
-}
+style.italic = function (str) {
+    if (!colored) return str;
+    return style(3) + str + style(23);
+};
 
-function cyan(value) {
-    if (!colored) return value;
-    return '\u001b[36m' + value + '\u001b[39m';
-}
+style.underline = function (str) {
+    if (!colored) return str;
+    return style(4) + str + style(24);
+};
 
-function white(value) {
-    if (!colored) return value;
-    return '\u001b[37m' + value + '\u001b[39m';
-}
+style.strikethrough = function (str) {
+    if (!colored) return str;
+    return style(9) + str + style(29);
+};
 
-function grey(value) {
-    if (!colored) return value;
-    return '\u001b[90m' + value + '\u001b[39m';
-}
+style.black = function (str) {
+    if (!colored) return str;
+    return style(30) + str + style(39);
+};
+
+style.red = function (str) {
+    if (!colored) return str;
+    return style(31) + str + style(39);
+};
+
+style.green = function (str) {
+    if (!colored) return str;
+    return style(32) + str + style(39);
+};
+
+style.yellow = function (str) {
+    if (!colored) return str;
+    return style(33) + str + style(39);
+};
+
+style.blue = function (str) {
+    if (!colored) return str;
+    return style(34) + str + style(39);
+};
+
+style.magenta = function (str) {
+    if (!colored) return str;
+    return style(35) + str + style(39);
+};
+
+style.cyan = function (str) {
+    if (!colored) return str;
+    return style(36) + str + style(39);
+};
+
+style.white = function (str) {
+    if (!colored) return str;
+    return style(37) + str + style(39);
+};
+
+style.grey = function (str) {
+    if (!colored) return str;
+    return style(90) + str + style(39);
+};

@@ -102,6 +102,20 @@ assert.object = function (value, checkObj) {
 };
 
 /**
+ * @param {object} value 
+ * @param {...function} classFns 
+ * @throws {TypeError}
+ * @returns {assert}
+ */
+assert.instance = function (value, ...classFns) {
+    if (!classFns.some(classFn => value instanceof classFn)) throwErr(
+        assert.instance, TypeError,
+        'expected to be instance of ' + classFns.map(classFn => classFn.name).join(' or ')
+    );
+    return assert;
+};
+
+/**
  * @param {Array} value 
  * @param {(value: any, index: number) => boolean} [checkFn] 
  * @param {number} [min] 

@@ -1,0 +1,22 @@
+{
+  "name": "@pfoerdie/utility",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.js",
+  "devDependencies": {
+    "jest": "^26.6.3"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pfoerdie/utility.git"
+  },
+  "author": "pfoerdie@gmail.com",
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Pfoerdie/utility/issues"
+  },
+  "homepage": "https://github.com/Pfoerdie/utility#readme"
+}

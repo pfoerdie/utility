@@ -1,8 +1,9 @@
 const _ = require('.');
 const constants = exports;
 
-constants.NODE_ENV = process.env.NODE_ENV;
+constants.NODE_ENV = process.env.NODE_ENV || '';
 constants.PROD = (constants.NODE_ENV === 'production');
+constants.TEST = ('test' in global);
 
 constants.PI = Math.PI;
 constants.E = Math.E;

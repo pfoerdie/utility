@@ -1,5 +1,6 @@
 const
     _ = require('.'),
+    silent = _.constants.PROD || _.constants.TEST,
     colored = true;
 
 /**
@@ -8,7 +9,7 @@ const
  * @param {Iterable|Error|string} args 
  */
 const audit = module.exports = function (scope, method, args) {
-    if (_.constants.PROD) return;
+    if (silent) return;
     let output = styleAuditStart();
 
     if (_.is.string(scope)) {
@@ -36,7 +37,8 @@ const audit = module.exports = function (scope, method, args) {
         }
     }
 
-    process.stdout.write(output + '\n\n');
+    // console.log(output);
+    process.stdout.write(output + '\n');
 };
 
 /**

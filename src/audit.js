@@ -37,8 +37,7 @@ const audit = module.exports = function (scope, method, args) {
         }
     }
 
-    // console.log(output);
-    process.stdout.write(output + '\n');
+    console.log(output);
 };
 
 /**

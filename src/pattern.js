@@ -12,4 +12,4 @@ pattern.IRI = /^[a-z][a-z+.-]*:[^\s"<>\\^`{|}]*$/i;
 /**
  * @see https://tools.ietf.org/html/rfc4646#section-2.1
  */
-pattern.LanguageTag = /^[a-z]{1,3}(?:-[0-9a-z]{2,8})*]$/i;
+pattern.LanguageTag = /^[a-z]{1,3}(?:-[0-9a-z]{2,8})*$/i;

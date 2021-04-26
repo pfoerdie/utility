@@ -8,7 +8,7 @@ _.is = require('./is');
 _.assert = require('./assert');
 _.create = require('./create');
 _.create = require('./create');
-_.print = require('./print');
+_.audit = require('./audit');
 _.prop = require('./prop');
 
 _.prop.lock.deep(exports);

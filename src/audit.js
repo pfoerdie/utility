@@ -7,9 +7,9 @@ const
  * @param {string|Iterable|Error|string} method 
  * @param {Iterable|Error|string} args 
  */
-const print = module.exports = function (scope, method, args) {
+const audit = module.exports = function (scope, method, args) {
     if (_.constants.PROD) return;
-    let output = styleLogStart();
+    let output = styleAuditStart();
 
     if (_.is.string(scope)) {
         output += styleMessage(scope);
@@ -36,14 +36,13 @@ const print = module.exports = function (scope, method, args) {
         }
     }
 
-    // console.log(output);
-    process.stdout.write(output + '\n');
+    process.stdout.write(output + '\n\n');
 };
 
 /**
  * @returns {string}
  */
-function styleLogStart() {
+function styleAuditStart() {
     const now = new Date();
     return style.grey('[' + now.toLocaleTimeString() + '.' + now.getMilliseconds() + ']:') + ' ';
 }

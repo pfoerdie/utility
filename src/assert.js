@@ -53,6 +53,18 @@ assert.not.equal = function (value, other) {
  * @throws {TypeError|Error}
  * @returns {assert}
  */
+assert.boolean = function (value) {
+    if (!_.is.boolean(value)) throwErr(assert.number, TypeError, 'expected to be a boolean');
+    return assert;
+};
+
+/**
+ * @param {number} value 
+ * @param {number} [min] 
+ * @param {number} [max] 
+ * @throws {TypeError|Error}
+ * @returns {assert}
+ */
 assert.number = function (value, min = -Infinity, max = Infinity) {
     if (!_.is.number(value)) throwErr(assert.number, TypeError, 'expected to be a number');
     if (value < min) throwErr(assert.number, Error, 'expected to be at minimum ' + min);
@@ -111,6 +123,20 @@ assert.instance = function (value, ...classFns) {
     if (!classFns.some(classFn => value instanceof classFn)) throwErr(
         assert.instance, TypeError,
         'expected to be instance of ' + classFns.map(classFn => classFn.name).join(' or ')
+    );
+    return assert;
+};
+
+/**
+ * @param {object} value 
+ * @param {...function} classFns 
+ * @throws {TypeError}
+ * @returns {assert}
+ */
+assert.not.instance = function (value, ...classFns) {
+    if (classFns.some(classFn => value instanceof classFn)) throwErr(
+        assert.instance, TypeError,
+        'expected not to be instance of ' + classFns.map(classFn => classFn.name).join(' or ')
     );
     return assert;
 };

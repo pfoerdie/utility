@@ -21,3 +21,7 @@ _.prop.lock.deep(exports);
  * @see https://tools.ietf.org/html/rfc4646
  * @typedef {string} LanguageTag
  */
+
+/**
+ * @typedef {number} integer
+ */

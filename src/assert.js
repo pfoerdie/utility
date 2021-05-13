@@ -73,6 +73,20 @@ assert.number = function (value, min = -Infinity, max = Infinity) {
 };
 
 /**
+ * @param {number} value 
+ * @param {number} [min] 
+ * @param {number} [max] 
+ * @throws {TypeError|Error}
+ * @returns {assert}
+ */
+assert.integer = function (value, min = -Infinity, max = Infinity) {
+    if (!_.is.number.integer(value)) throwErr(assert.integer, TypeError, 'expected to be an integer');
+    if (value < min) throwErr(assert.integer, Error, 'expected to be at minimum ' + min);
+    if (value > max) throwErr(assert.integer, Error, 'expected to be at maximum ' + max);
+    return assert;
+};
+
+/**
  * @param {string} value 
  * @param {RegExp} [pattern] 
  * @param {number} [min] 

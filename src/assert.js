@@ -79,10 +79,10 @@ assert.number = function (value, min = -Infinity, max = Infinity) {
  * @throws {TypeError|Error}
  * @returns {assert}
  */
-assert.integer = function (value, min = -Infinity, max = Infinity) {
-    if (!_.is.number.integer(value)) throwErr(assert.integer, TypeError, 'expected to be an integer');
-    if (value < min) throwErr(assert.integer, Error, 'expected to be at minimum ' + min);
-    if (value > max) throwErr(assert.integer, Error, 'expected to be at maximum ' + max);
+assert.number.integer = function (value, min = -Infinity, max = Infinity) {
+    if (!_.is.number.integer(value)) throwErr(assert.number.integer, TypeError, 'expected to be an integer');
+    if (value < min) throwErr(assert.number.integer, Error, 'expected to be at minimum ' + min);
+    if (value > max) throwErr(assert.number.integer, Error, 'expected to be at maximum ' + max);
     return assert;
 };
 

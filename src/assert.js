@@ -47,9 +47,9 @@ assert.not.equal = function (value, other) {
 };
 
 /**
- * @param {number} value 
- * @param {number} [min] 
- * @param {number} [max] 
+ * @param {boolean} value 
+ * @param {integer} [min] 
+ * @param {integer} [max] 
  * @throws {TypeError|Error}
  * @returns {assert}
  */
@@ -60,8 +60,8 @@ assert.boolean = function (value) {
 
 /**
  * @param {number} value 
- * @param {number} [min] 
- * @param {number} [max] 
+ * @param {integer} [min] 
+ * @param {integer} [max] 
  * @throws {TypeError|Error}
  * @returns {assert}
  */
@@ -73,9 +73,9 @@ assert.number = function (value, min = -Infinity, max = Infinity) {
 };
 
 /**
- * @param {number} value 
- * @param {number} [min] 
- * @param {number} [max] 
+ * @param {integer} value 
+ * @param {integer} [min] 
+ * @param {integer} [max] 
  * @throws {TypeError|Error}
  * @returns {assert}
  */
@@ -89,8 +89,8 @@ assert.number.integer = function (value, min = Number.MIN_SAFE_INTEGER, max = Nu
 /**
  * @param {string} value 
  * @param {RegExp} [pattern] 
- * @param {number} [min] 
- * @param {number} [max] 
+ * @param {integer} [min] 
+ * @param {integer} [max] 
  * @throws {TypeError|Error}
  * @returns {assert}
  */
@@ -99,6 +99,20 @@ assert.string = function (value, pattern, min = 0, max = Number.MAX_SAFE_INTEGER
     if (pattern && !pattern.test(value)) throwErr(assert.string, Error, 'expected to match pattern ' + pattern);
     if (value.length < min) throwErr(assert.string, Error, 'expected to have minimum length of ' + min);
     if (value > max) throwErr(assert.string, Error, 'expected to have maximum length of ' + max);
+    return assert;
+};
+
+/**
+ * @param {IRI} value 
+ * @param {RegExp} [pattern] 
+ * @param {integer} [min] 
+ * @param {integer} [max] 
+ * @throws {TypeError|Error}
+ * @returns {assert}
+ */
+assert.string.IRI = function (value) {
+    if (!_.is.string(value)) throwErr(assert.string.IRI, TypeError, 'expected to be a string');
+    if (!_.pattern.IRI.test(value)) throwErr(assert.string.IRI, Error, 'expected to match IRI pattern');
     return assert;
 };
 

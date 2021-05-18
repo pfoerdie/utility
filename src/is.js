@@ -188,3 +188,7 @@ is.buffer = function (value) {
 is.error = function (value) {
     return value instanceof Error;
 };
+
+is.promise = function (value) {
+    return value instanceof Promise;
+};

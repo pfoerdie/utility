@@ -1,4 +1,5 @@
 const _ = require('.');
+
 const create = exports;
 
 /**
@@ -19,12 +20,4 @@ create.ArrayValidator = function (checkFn) {
     return function (value) {
         return _.is.array(value) && value.every(checkFn);
     };
-};
-
-/**
- * @param {string} bnfDoc 
- * @returns {(value: string) => boolean}
- */
-create.BNFValidator = function (bnfDoc) {
-    throw new Error('not implemented'); // TODO
 };

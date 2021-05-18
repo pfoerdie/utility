@@ -1,4 +1,4 @@
-/** @module utility */
+/// <reference path="types.d.ts" />
 const _ = exports;
 
 _.constants = require('./constants');
@@ -9,19 +9,6 @@ _.assert = require('./assert');
 _.create = require('./create');
 _.audit = require('./audit');
 _.prop = require('./prop');
+_.method = require('./method');
 
 _.prop.lock.deep(exports);
-
-/**
- * @see https://tools.ietf.org/html/rfc3987
- * @typedef {string} IRI
- */
-
-/**
- * @see https://tools.ietf.org/html/rfc4646
- * @typedef {string} LanguageTag
- */
-
-/**
- * @typedef {number} integer
- */

@@ -7,7 +7,7 @@ const _ = require('.');
  * @throws {errType}
  * @returns {assert}
  */
-const assert = module.exports = function (value, errMsg = '', errType = Error) {
+const assert = module.exports = function (value, errMsg = 'invalid', errType = Error) {
     if (!value) throwErr(assert, errType, errMsg);
     return assert;
 };
@@ -19,7 +19,7 @@ const assert = module.exports = function (value, errMsg = '', errType = Error) {
  * @throws {errType}
  * @returns {assert}
  */
-assert.not = function (value, errMsg = '', errType = Error) {
+assert.not = function (value, errMsg = 'invalid', errType = Error) {
     if (value) throwErr(assert.not, errType, errMsg);
     return assert;
 };

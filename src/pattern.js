@@ -1,4 +1,5 @@
 const _ = require('.');
+
 const pattern = exports;
 
 pattern.nonempty = /\S/;

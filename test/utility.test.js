@@ -82,4 +82,12 @@ describe('utility.test', function () {
 
     });
 
+    describe('_.generate', function () {
+
+        test('sequence', function () {
+            expect(Array.from(_.generate.sequence(0, 5, 1))).toMatchObject([0, 1, 2, 3, 4, 5]);
+        });
+
+    });
+
 });

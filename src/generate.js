@@ -18,71 +18,55 @@ generate.sequence = function* (length = 0) {
 
 generate.primes = function (length = 0) {
     _.assert.number.integer(length, 0);
-    const primes = new Int32Array(length); // a list of all primes for later reference
+    const primes = new Int32Array(length); // a list of all primes
     if (length == 0) return primes;
-    // primes[0] = 2; // NOTE this would be necessary for 5. to work
+    primes[0] = 2; // set the first prime for the algorithm to work
 
-    // Sieve of Eratosthenes
+    // NOTE buffer size maximum = 2 ** 32 - 1;
+    // const sieve_max_size = 6; // works with length = 10
+    const sieve_max_size = 2 ** 24 - 1; // good for length < 1 000 000
+    // const sieve_max_size = 2 ** 25 - 1; // good for length > 2 000 000
+    // IDEA find out a function for the optimal seive size at a given index
+    //      to improve performance even further for this algorithm
     const not_prime = 0, is_prime = 1;
-    let currentSieve = Buffer.alloc(1, is_prime), currentOffset = 2; // NOTE this variable would be redundant for 5. to work
+    let index = 1, lastPrime = 2, coveredMax = 3;
+    while (index < length) {
 
-    for (let index = 0, lastIndex = length - 1; index < lastIndex; index++) {
-        // 1. find the next prime in the valid sieve and add it to the primes
-        // TODO this might be redundant, if 5. is working
-        for (let k = 0; k < currentSieve.length; k++) {
-            if (currentSieve[k] == is_prime) {
-                primes[index] = currentOffset + k;
-                break;
-            }
-        }
-
-        // 2. extend the current sieve to the next prime range, excluding the previously searched sieve
+        // 1. create an empty sieve of eratosthenes that extends
+        // from the covered maximum to the square of the last found prime
+        // and initialize it with the is prime value
         const
-            foundPrime = primes[index],
-            sieveLength = foundPrime ** 2 - foundPrime,
-            newSieve = Buffer.alloc(sieveLength, is_prime),
-            newOffset = foundPrime + 1,
-            sieveOverlap = currentSieve.copy(newSieve, 0, newOffset - currentOffset);
+            sieveOffset = coveredMax,
+            sieveSize = Math.min(lastPrime * lastPrime - sieveOffset, sieve_max_size),
+            // NOTE its the maximal possibly sieve size currently, not the optimal
+            sieveMax = sieveOffset + sieveSize;
+        const sieve = Buffer.alloc(sieveSize, is_prime);
 
-        // 3. validate the new portion of the sieve with the currently known primes
-        newSieve[sieveLength - 1] = not_prime; // the sieve happens to end with the square of the previously found prime
-        for (let i = 0; i < index; i++) { // now we also does not have to include it in the validation
-            const prime = primes[i], primeOffset = (- newOffset - sieveOverlap) % prime;
-            // the overlapping part does not need to be validated
-            for (let k = sieveOverlap + primeOffset; k < newSieve.length; k += prime) {
-                // mark all multiple of the prime as not prime
-                newSieve[k] = not_prime;
+        // 2. mark all multiples of known primes in the sieve as not prime
+        // and calculate the offset in the sieve array via modulo prime
+        for (let i = 0; i < index; i++) {
+            const prime = primes[i];
+            if (prime * prime > sieveMax) break; // NOTE might reduce the multiplication
+            for (let k = (- sieveOffset) % prime; k < sieveSize; k += prime) {
+                sieve[k] = not_prime;
             }
         }
 
-        // console.log(`(${index}) Sieve<${currentOffset},${currentOffset + currentSieve.length - 1}>: [${currentSieve.length > 20
-        //     ? currentSieve.subarray(0, 20).join() + ',...'
-        //     : currentSieve.join()
-        //     }] => ${foundPrime}`);
-
-        // 4. set the new sieve as current sieve
-        currentSieve = newSieve;
-        currentOffset = newOffset;
-
-        // IDEA: this can be much much much much faster!!!!!!!
-        // 5. add the primes now, instead of at 1., because the whole sieve is valid at this point
-        //    also, do not copy the old sieve over, because its part of a valid sieve and must not be reused
-        // for (let k = 0; k < currentSieve.length; k++) {
-        //     if (currentSieve[k] == is_prime) {
-        //         primes[index] = currentOffset + k;
-        //         break;
-        //     }
-        // }
-    }
-
-    // this extra for loop replaces the last iteration of the main for loop,
-    // because it does not need to create the next sieve
-    // TODO this would also be redundant, if 5. is working
-    for (let k = 0; k < currentSieve.length; k++) {
-        if (currentSieve[k] == is_prime) {
-            primes[length - 1] = currentOffset + k;
-            break;
+        // 3. update covered maximum add all left primes in the sieve 
+        // to the primes array and increment the index
+        const lastIndex = index;
+        for (let k = 0; k < sieveSize; k++) {
+            if (sieve[k] == is_prime) {
+                lastPrime = sieveOffset + k;
+                primes[index++] = lastPrime;
+                if (index >= length) break;
+            }
         }
+        if (index == lastIndex)
+            throw new Error('no new primes found in the sieve');
+
+        // 4. update covered maximum for the next iteration
+        coveredMax = sieveMax;
     }
 
     return primes;

@@ -84,8 +84,14 @@ describe('utility.test', function () {
 
     describe('_.generate', function () {
 
-        test('sequence', function () {
-            expect(Array.from(_.generate.sequence(0, 5, 1))).toMatchObject([0, 1, 2, 3, 4, 5]);
+        // test('sequence', function () {
+        //     expect(Array.from(_.generate.sequence(0, 5, 1))).toMatchObject([0, 1, 2, 3, 4, 5]);
+        // });
+
+        test('primes', function () {
+            const first_10_primes = _.generate.primes(10);
+            expect(first_10_primes).toBeInstanceOf(Int32Array);
+            expect([...first_10_primes]).toMatchObject([2, 3, 5, 7, 11, 13, 17, 19, 23, 29]);
         });
 
     });

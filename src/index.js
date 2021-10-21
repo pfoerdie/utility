@@ -11,5 +11,6 @@ _.generate = require('./generate');
 _.audit = require('./audit');
 _.prop = require('./prop');
 _.method = require('./method');
+// _.time = require('./time');
 
 _.prop.lock.deep(exports);

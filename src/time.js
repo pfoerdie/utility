@@ -1,34 +1,49 @@
 const _ = require('.');
 
 const time = module.exports = function (value) {
-    const
-        _date = _parseDate(value),
-        time = _stringifyTime(_date),
-        timezone = _stringifyTimezone(d_dateate);
+    const date = _parseDate(value);
+    return _stringifyTime(date);
+};
 
-    return time + timezone;
+time.iso = function (value) {
+    const date = _parseDate(value);
+    return _stringifyTime(date) + _stringifyTimezone(date);
+};
+
+time.utc = function (value) {
+    const date = _parseDate(value);
+    return _stringifyUtcTime(date) + 'Z';
 };
 
 time.date = function (value) {
-    const
-        _date = _parseDate(value),
-        date = _stringifyDate(_date),
-        timezone = _stringifyTimezone(_date);
+    const date = _parseDate(value);
+    return _stringifyDate(date);
+};
 
-    return date + timezone;
+time.date.iso = function (value) {
+    const date = _parseDate(value);
+    return _stringifyDate(date) + _stringifyTimezone(date);
+};
+
+time.date.utc = function (value) {
+    const date = _parseDate(value);
+    return _stringifyUtcDate(date) + 'Z';
 };
 
 time.datetime = function (value) {
-    const
-        _date = _parseDate(value),
-        time = _stringifyTime(_date),
-        date = _stringifyDate(_date),
-        timezone = _stringifyTimezone(_date);
-
-    return date + 'T' + time + timezone;
+    const date = _parseDate(value);
+    return _stringifyDate(date) + 'T' + _stringifyTime(date);
 };
 
-// TODO UTC
+time.datetime.iso = function (value) {
+    const date = _parseDate(value);
+    return _stringifyDate(date) + 'T' + _stringifyTime(date) + _stringifyTimezone(date);
+};
+
+time.datetime.utc = function (value) {
+    const date = _parseDate(value);
+    return _stringifyUtcDate(date) + 'T' + _stringifyUtcTime(date) + 'Z';
+};
 
 function _parseDate(value) {
     if (_.is.null(value)) return new Date();
@@ -45,11 +60,30 @@ function _stringifyTime(date) {
     return hour + ':' + minute + ':' + second + '.' + millisecond;
 }
 
+function _stringifyUtcTime(date) {
+    const
+        hour = date.getUTCHours().toString().padStart(2, '0'),
+        minute = date.getUTCMinutes().toString().padStart(2, '0'),
+        second = date.getUTCSeconds().toString().padStart(2, '0'),
+        millisecond = date.getUTCMilliseconds().toString();
+
+    return hour + ':' + minute + ':' + second + '.' + millisecond;
+}
+
 function _stringifyDate(date) {
     const
         year = date.getFullYear().toString(),
         month = (date.getMonth() + 1).toString().padStart(2, '0'),
         day = date.getDate().toString().padStart(2, '0');
+
+    return year + '-' + month + '-' + day;
+}
+
+function _stringifyUtcDate(date) {
+    const
+        year = date.getUTCFullYear().toString(),
+        month = (date.getUTCMonth() + 1).toString().padStart(2, '0'),
+        day = date.getUTCDate().toString().padStart(2, '0');
 
     return year + '-' + month + '-' + day;
 }

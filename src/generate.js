@@ -2,20 +2,19 @@ const _ = require('.');
 
 const generate = exports;
 
+/**
+ * @param {number} length 
+ * @returns {Iterator<number>}
+ */
 generate.sequence = function* (length = 0) {
     _.assert.number.integer(length, 0);
     for (let index = 0; index < length; index++) yield index;
 };
 
-// IDEA
-// generate.sequence = function (length = 0) {
-//     _.assert.number(length, 0);
-//     return {
-//         *[Symbol.iterator]() { for (let index = 0; index < length; index++) yield index; },
-//         *map(fn) { }
-//     };
-// };
-
+/**
+ * @param {number} length 
+ * @returns {Int32Array}
+ */
 generate.primes = function (length = 0) {
     _.assert.number.integer(length, 0);
     const primes = new Int32Array(length); // a list of all primes

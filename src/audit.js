@@ -44,8 +44,7 @@ const audit = module.exports = function (scope, method, args) {
  * @returns {string}
  */
 function styleAuditStart() {
-    const now = new Date();
-    return style.grey('[' + now.toLocaleTimeString() + '.' + now.getMilliseconds() + ']:') + ' ';
+    return style.grey('[' + _.time() + ']:') + ' ';
 }
 
 /**

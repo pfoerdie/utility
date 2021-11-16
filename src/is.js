@@ -32,6 +32,22 @@ is.number.integer = function (value) {
     return is.number(value) && Number.isInteger(value);
 };
 
+is.number.integer.positive = function (value) {
+    return is.number.integer(value) && value > 0;
+};
+
+is.number.integer.nonnegative = function (value) {
+    return is.number.integer(value) && value >= 0;
+};
+
+is.number.integer.nonpositive = function (value) {
+    return is.number.integer(value) && value <= 0;
+};
+
+is.number.integer.negative = function (value) {
+    return is.number.integer(value) && value < 0;
+};
+
 is.number.finite = function (value) {
     return is.number(value) && value > -Infinity && value < Infinity;
 };

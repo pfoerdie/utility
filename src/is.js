@@ -4,8 +4,16 @@ const is = module.exports = function (value) {
     return value !== void 0;
 };
 
+is.not = function (value) {
+    return !is(value);
+};
+
 is.null = function (value) {
     return (value ?? null) === null;
+};
+
+is.not.null = function (value) {
+    return !is.null(value);
 };
 
 is.primitive = function (value) {
@@ -25,11 +33,19 @@ is.falsy = function (value) {
 };
 
 is.number = function (value) {
-    return typeof value === 'number' && !isNaN(value);
+    return typeof value === 'number' && !Number.isNaN(value);
+};
+
+is.number.any = function (value) {
+    return typeof value === 'number';
+};
+
+is.number.nan = function (value) {
+    return typeof value === 'number' && Number.isNaN(value);
 };
 
 is.number.integer = function (value) {
-    return is.number(value) && Number.isInteger(value);
+    return is.number(value) && Number.isSafeInteger(value);
 };
 
 is.number.integer.positive = function (value) {
@@ -49,7 +65,7 @@ is.number.integer.negative = function (value) {
 };
 
 is.number.finite = function (value) {
-    return is.number(value) && value > -Infinity && value < Infinity;
+    return is.number(value) && Number.isFinite(value);
 };
 
 is.string = function (value) {
@@ -93,7 +109,7 @@ is.object = function (value) {
 };
 
 is.object.nonempty = function (value) {
-    return is.object(value) && Object.values(value).some(val => !is.null(val));
+    return is.object(value) && Object.values(value).some(is.not.null);
 };
 
 is.object.iterable = function (value) {

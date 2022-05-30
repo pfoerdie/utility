@@ -22,8 +22,22 @@ create.ArrayValidator = function (checkFn) {
     };
 };
 
-create.MultiValidator = function (...checkFns) {
+create.CombinedValidator = Object.create(null);
+
+create.CombinedValidator.AND = function (...checkFns) {
     return function (value) {
         return checkFns.every(checkFn => checkFn(value));
+    };
+};
+
+create.CombinedValidator.OR = function (...checkFns) {
+    return function (value) {
+        return checkFns.some(checkFn => checkFn(value));
+    };
+};
+
+create.CombinedValidator.XOR = function (...checkFns) {
+    return function (value) {
+        return checkFns.filter(checkFn => checkFn(value)).length === 1;
     };
 };

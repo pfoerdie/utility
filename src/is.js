@@ -24,6 +24,14 @@ is.boolean = function (value) {
     return typeof value === 'boolean';
 };
 
+is.boolean.true = function (value) {
+    return value === true;
+};
+
+is.boolean.false = function (value) {
+    return value === false;
+};
+
 is.truthy = function (value) {
     return !!value;
 };
@@ -106,6 +114,10 @@ is.function.class = function (value) {
 
 is.object = function (value) {
     return value && typeof value === 'object';
+};
+
+is.object.null = function (value) {
+    return value === null;
 };
 
 is.object.nonempty = function (value) {

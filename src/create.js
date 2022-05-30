@@ -21,3 +21,9 @@ create.ArrayValidator = function (checkFn) {
         return _.is.array(value) && value.every(checkFn);
     };
 };
+
+create.MultiValidator = function (...checkFns) {
+    return function (value) {
+        return checkFns.every(checkFn => checkFn(value));
+    };
+};

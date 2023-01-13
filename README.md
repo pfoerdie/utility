@@ -49,7 +49,7 @@ _.is.typedarray(new Uint8Array(42));
 ## pattern
 
 ```js
-_.pattern.IRI.test('http://example.org/');
+_.pattern.iri.test('http://example.org/');
 ```
 
 ## print

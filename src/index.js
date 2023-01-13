@@ -1,16 +1,16 @@
 /// <reference path="types.d.ts" />
-const _ = exports;
+const util = exports
 
-_.constants = require('./constants');
-_.errors = require('./errors');
-_.pattern = require('./pattern');
-_.is = require('./is');
-_.assert = require('./assert');
-_.create = require('./create');
-_.generate = require('./generate');
-_.audit = require('./audit');
-_.prop = require('./prop');
-_.method = require('./method');
-_.time = require('./time');
+util.constants = require('./constants')
+util.errors = require('./errors')
+util.pattern = require('./pattern')
+util.is = require('./is')
+util.assert = require('./assert')
+util.create = require('./create')
+util.generate = require('./generate')
+util.audit = require('./audit')
+util.prop = require('./prop')
+util.method = require('./method')
+util.time = require('./time')
 
-_.prop.lock.deep(exports);
+util.prop.lock.deep(exports)

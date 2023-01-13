@@ -1,6 +1,6 @@
-const _ = require('.');
+// const util = require('.')
 
-const errors = exports;
+const errors = exports
 
-errors.Error = Error;
-errors.TypeError = TypeError;
+errors.Error = Error
+errors.TypeError = TypeError

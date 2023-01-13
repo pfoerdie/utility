@@ -1,4 +1,4 @@
-# utility
+# @pfoerdie/utility
 
 ```js
 const _ = require('@pfoerdie/utility');

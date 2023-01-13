@@ -1,13 +1,13 @@
 # @pfoerdie/utility
 
 ```js
-const _ = require('@pfoerdie/utility');
+const util = require('@pfoerdie/utility')
 ```
 
 ## assert
 
 ```js
-_.assert(true === false, 'true !== false', Error);
+util.assert(true === false, 'true !== false', Error)
 ```
 
 ## constants
@@ -17,14 +17,14 @@ const {
     NODE_ENV, PROD, TEST,
     PI, E, EPSILON,
     $$iterator, $$species, $$hasInstance
-} = _.constants;
+} = util.constants;
 ```
 
 ## create
 
 ```js
-const isEmptyString = _.create.StringValidator(/^\S*$/);
-const isEmptyStringArray = _.create.ArrayValidator(isEmpty);
+const isEmptyString = util.create.StringValidator(/^\S*$/)
+const isEmptyStringArray = util.create.ArrayValidator(isEmpty)
 ```
 
 ## errors
@@ -32,36 +32,36 @@ const isEmptyStringArray = _.create.ArrayValidator(isEmpty);
 ```js
 const {
     Error, TypeError
-} = _.errors;
+} = util.errors;
 ```
 
 ## is
 
 ```js
-_.is.boolean(true);
-_.is.number(13.37);
-_.is.string('lorem ipsum');
-_.is.function(() => null);
-_.is.object({});
-_.is.typedarray(new Uint8Array(42));
+util.is.boolean(true)
+util.is.number(13.37)
+util.is.string('lorem ipsum')
+util.is.function(() => null)
+util.is.object({})
+util.is.typedarray(new Uint8Array(42))
 ```
 
 ## pattern
 
 ```js
-_.pattern.iri.test('http://example.org/');
+util.pattern.iri.test('http://example.org/')
 ```
 
 ## print
 
 ```js
-_.print('Hello World!');
-_.print(new Error('test'), 'constructor', ['test']);
+util.print('Hello World!')
+util.print(new Error('test'), 'constructor', ['test'])
 ```
 
 ## prop
 
 ```js
-const obj = {test: 'lorem ipsum', abc: {a: 'a', b: 'b', c: 'c'}};
-_.prop.lock.deep(obj);
+const obj = {test: 'lorem ipsum', abc: {a: 'a', b: 'b', c: 'c'}}
+util.prop.lock.deep(obj)
 ```

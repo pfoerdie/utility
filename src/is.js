@@ -112,12 +112,24 @@ is.function = function (value) {
   return typeof value === 'function'
 }
 
-is.function.callable = function (value) {
-  return is.function(value) && (!Object.hasOwn(value, 'prototype') || Object.hasOwn(value, 'arguments'))
+is.function.regular = function (value) {
+  return is.function(value) && value.toString().startsWith('function')
 }
 
 is.function.class = function (value) {
-  return is.function(value) && Object.hasOwn(value, 'prototype') && !Object.hasOwn(value, 'arguments')
+  return is.function(value) && value.toString().startsWith('class')
+}
+
+is.function.lambda = function (value) {
+  return is.function(value) && value.toString().startsWith('(')
+}
+
+is.function.anonymous = function (value) {
+  return is.function(value) && is.boolean.falsy(value.name)
+}
+
+is.function.instantiable = function (value) {
+  return is.function(value) && Object.hasOwn(value, 'prototype')
 }
 
 is.object = function (value) {
